@@ -1,0 +1,17 @@
+body {
+    background: linear-gradient(to right, #8a564c, #b17469);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.container {
+    flex: 1; 
+}
+footer {
+    background: #111;
+    text-align: center;
+    padding: 15px;
+    color: #ffffff;
+    font-size: 14px;
+}
