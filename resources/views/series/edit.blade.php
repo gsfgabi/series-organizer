@@ -13,7 +13,7 @@
     </div>
 
     <div class="card card-body shadow">
-        <form action="{{ route('series.update', $series->id) }}" method="POST">
+        <form action="{{ route('series.update', $series->id) }}" method="POST" enctype="multipart/form-data">
             @method('PUT')
             @csrf
 
@@ -44,6 +44,15 @@
                 <label class="form-label fw-bold">📝 Descrição</label>
                 <textarea class="form-control" name="description" rows="3">{{ old('description', $series->description) }}</textarea>
                 @error('description')
+                    <span class="text-danger small">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Imagem -->
+            <div class="mt-3">
+                <label class="form-label fw-bold">🖼️ Imagem</label>
+                <input class="form-control" type="file" name="image" accept="image/*">
+                @error('image')
                     <span class="text-danger small">{{ $message }}</span>
                 @enderror
             </div>

@@ -14,6 +14,7 @@ class Series extends Model
         'title',
         'description',
         'launch_date',
+        'image_id',
     ];
 
     protected $casts = [
@@ -23,5 +24,10 @@ class Series extends Model
     public function seasons()
     {
         return $this->hasMany(Season::class);
+    }
+
+    public function file()
+    {
+        return $this->belongsTo(File::class, 'image_id');
     }
 }

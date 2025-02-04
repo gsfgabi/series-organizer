@@ -3,10 +3,14 @@
 use App\Http\Controllers\SeasonsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
-    return redirect()->route('series.index');
+    return redirect()->route('dashboard');
 });
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
 
 Route::prefix('/series')->group(function () {
     Route::get('/', [SeriesController::class, 'index'])
@@ -27,6 +31,8 @@ Route::prefix('/series')->group(function () {
     Route::delete('/{id}', [SeriesController::class, 'destroy'])
         ->name('series.destroy');
 
+    Route::get('/{id}', [SeriesController::class, 'show'])
+        ->name('series.show');
 
     Route::prefix("/{serie_id}/temporadas")->group(function () {
         Route::get('/', [SeasonsController::class, 'index'])
