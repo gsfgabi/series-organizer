@@ -42,7 +42,7 @@
                                 <button type="submit" class="btn btn-danger btn-sm">🗑️ Apagar</button>
                             </form>
 
-                            <a href="{{ route('seasons.index', $serie->id) }}" class="btn btn-info btn-sm">📅 Temporadas</a>
+                            <a href="{{ route('series.seasons.index', $serie->id) }}" class="btn btn-info btn-sm">📅 Temporadas</a>
                         </td>
                     </tr>
                 @endforeach
