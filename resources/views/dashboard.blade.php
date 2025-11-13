@@ -1,181 +1,219 @@
 @extends('app')
 
 @section('content')
-<div class="min-h-screen py-12">
+<div class="min-h-screen py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent mb-4">
-                ✨ Series Organizer
+        <div class="text-center mb-10">
+            <div class="inline-block mb-4">
+                <div class="w-20 h-20 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center shadow-xl ring-4 ring-primary-200 mx-auto">
+                    <span class="text-4xl">🧪</span>
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-700 to-primary-900 bg-clip-text text-transparent mb-3">
+                TestLab
             </h1>
-            <p class="text-xl text-primary-600">Gerencie suas séries favoritas com estilo</p>
+            <p class="text-lg text-primary-700 font-medium">Plataforma de Testes de Funcionalidades</p>
+            <div class="mt-4 flex items-center justify-center gap-2">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary-100 text-primary-800 border border-primary-300">
+                    <span class="w-2 h-2 bg-primary-500 rounded-full mr-2 animate-pulse"></span>
+                    Sistema Ativo
+                </span>
+            </div>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div class="stats-card">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"></path>
+        <!-- Links Salvos -->
+        <div class="mb-10">
+            <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-primary-200 p-8 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-primary-800 mb-1 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                             </svg>
-                        </div>
+                            Gerenciador de Links
+                        </h2>
+                        <p class="text-sm text-primary-600">Adicione e organize seus links de teste</p>
                     </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-primary-600">Total de Séries</p>
-                        <p class="text-3xl font-bold text-primary-800">{{ $series->count() }}</p>
+                </div>
+
+                <div class="mb-6 p-5 bg-primary-50 rounded-xl border border-primary-200">
+                    <h3 class="text-lg font-semibold text-primary-800 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Adicionar Novo Link
+                    </h3>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input 
+                            type="url" 
+                            id="new-link-url"
+                            class="flex-1 px-4 py-3 border-2 border-primary-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-primary-900 placeholder-primary-400 transition-all"
+                            placeholder="Cole a URL aqui (Google Docs, Drive, etc.)"
+                        >
+                        <input 
+                            type="text" 
+                            id="new-link-title"
+                            class="w-full sm:w-56 px-4 py-3 border-2 border-primary-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-primary-900 placeholder-primary-400 transition-all"
+                            placeholder="Título (opcional)"
+                        >
+                        <button 
+                            id="save-link-btn"
+                            class="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                        >
+                            Salvar
+                        </button>
                     </div>
+                    <p id="save-link-error" class="text-red-600 text-sm mt-3 font-medium" style="display: none;"></p>
+                </div>
+
+                <div id="saved-links-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Links serão carregados aqui -->
                 </div>
             </div>
 
-            <div class="stats-card">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Área de visualização do conteúdo -->
+            <div id="saved-link-viewer" class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-primary-200 p-6" style="display: none;">
+                <div class="mb-4 flex items-center justify-between pb-4 border-b-2 border-primary-200">
+                    <h3 class="text-xl font-bold text-primary-800 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        Visualização do Conteúdo
+                    </h3>
+                    <button 
+                        id="close-viewer-btn"
+                        class="text-primary-600 hover:text-primary-800 hover:bg-primary-100 p-2 rounded-lg transition-colors"
+                        title="Fechar"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="saved-link-content" class="min-h-[500px] rounded-lg overflow-hidden border-2 border-primary-200">
+                    <!-- Conteúdo será carregado aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Link Embed Solutions -->
+        <div class="mb-10">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-primary-800 mb-2 flex items-center justify-center gap-2">
+                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    Visualizador de Links
+                </h2>
+                <p class="text-sm text-primary-600">Teste diferentes métodos de incorporação de conteúdo</p>
+            </div>
+            
+            <div class="space-y-6">
+                @livewire('iframe-embed')
+                
+                <!-- Solução 3: Proxy Server com Fetch API -->
+                <div id="embed-solution-3" class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-primary-200 p-6">
+                    <div class="mb-5">
+                        <h3 class="text-lg font-bold text-primary-800 mb-2 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                            </svg>
+                            Método 2: Proxy Server com Fetch API
+                        </h3>
+                        <p class="text-sm text-primary-600">Carregue documentos através de proxy server</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <input 
+                                type="url" 
+                                class="url-input flex-1 px-4 py-3 border-2 border-primary-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-primary-900 placeholder-primary-400 transition-all"
+                                placeholder="Cole a URL do Google Docs ou Drive aqui"
+                            >
+                            <button class="load-btn px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span>Carregar</span>
+                            </button>
+                            <button class="clear-btn px-4 py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-semibold shadow-lg">
+                                Limpar
+                            </button>
+                        </div>
+                        <p class="error-msg text-red-600 text-sm mt-3 font-medium" style="display: none;"></p>
+                    </div>
+
+                    <div class="file-info mb-3 p-4 bg-primary-50 border-2 border-primary-200 rounded-xl text-sm text-primary-800" style="display: none;"></div>
+                    <div class="iframe-container rounded-xl overflow-hidden border-2 border-primary-200" style="display: none;"></div>
+                </div>
+
+                <!-- Solução 4: Metadata Preview -->
+                <!-- <div id="embed-solution-4" class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-primary-800 mb-2 flex items-center">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Solução 4: Metadata Preview com Fetch
+                        </h3>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex gap-2">
+                            <input 
+                                type="url" 
+                                class="url-input flex-1 px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                placeholder="https://docs.google.com/document/d/... ou qualquer URL"
+                            >
+                            <button class="load-btn px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50">
+                                <span>Preview</span>
+                            </button>
+                            <button class="clear-btn px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                                Limpar
+                            </button>
+                        </div>
+                        <p class="error-msg text-red-500 text-sm mt-2" style="display: none;"></p>
+                    </div>
+
+                    <div class="preview-container" style="display: none;"></div>
+                    <div class="embed-container" style="display: none;"></div>
+                </div> -->
+
+                <!-- Solução 5: Validação e Conversão -->
+                <div id="embed-solution-5" class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-primary-200 p-6">
+                    <div class="mb-5">
+                        <h3 class="text-lg font-bold text-primary-800 mb-2 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                        </div>
+                            Método 3: Validação e Conversão Assíncrona
+                        </h3>
+                        <p class="text-sm text-primary-600">Valide URLs e converta automaticamente para formato embedável</p>
                     </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-primary-600">Assistidas</p>
-                        <p class="text-3xl font-bold text-primary-800">0</p>
-                    </div>
-                </div>
-            </div>
 
-            <div class="stats-card">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
+                    <div class="mb-4">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <input 
+                                type="url" 
+                                class="url-input flex-1 px-4 py-3 border-2 border-primary-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-primary-900 placeholder-primary-400 transition-all"
+                                placeholder="Cole qualquer URL para validar e converter"
+                            >
+                            <button class="load-btn px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span>Validar e Carregar</span>
+                            </button>
+                            <button class="clear-btn px-4 py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all font-semibold shadow-lg">
+                                Limpar
+                            </button>
                         </div>
+                        <p class="error-msg text-red-600 text-sm mt-3 font-medium" style="display: none;"></p>
+                        <div class="status-container mt-3 p-3 bg-primary-50 border border-primary-200 rounded-xl text-sm text-primary-800" style="display: none;"></div>
                     </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-primary-600">Em Andamento</p>
-                        <p class="text-3xl font-bold text-primary-800">0</p>
-                    </div>
+
+                    <div class="iframe-container rounded-xl overflow-hidden border-2 border-primary-200" style="display: none;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="text-center mb-12">
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button id="openCreateSeriesModal" class="btn">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    ✨ Adicionar Nova Série
-                </button>
-                <a href="{{ route('series.index') }}" class="btn-secondary">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-                    </svg>
-                    📺 Ver Todas as Séries
-                </a>
-            </div>
-        </div>
-
-        <!-- Series Grid -->
-        @if($series->count() > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                @foreach ($series as $serie)
-                    <div class="series-card group relative overflow-hidden">
-                        <div class="relative overflow-hidden">
-                            @if ($serie->file)
-                                <img class="series-image w-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                                     src="{{ asset('storage/series/' . $serie->file->name) }}" 
-                                     alt="{{ $serie->title }}" />
-                            @else
-                                <div class="series-image w-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                                    <svg class="w-16 h-16 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                            @endif
-                            
-                            <!-- Overlay com botões de ação -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                <div class="absolute bottom-4 left-4 right-4 flex justify-center space-x-3">
-                                    <a href="{{ route('series.show', $serie->id) }}" class="action-button" title="Ver Detalhes">
-                                        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                        </svg>
-                                    </a>
-                                    <a href="{{ route('series.edit', $serie->id) }}" class="action-button" title="Editar">
-                                        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </a>
-                                    <form action="{{ route('series.destroy', $serie->id) }}" method="POST" onsubmit="return confirmDelete('Tem certeza que deseja excluir esta série?')" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="action-button" title="Excluir">
-                                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-primary-800 mb-3 group-hover:text-primary-600 transition-colors duration-300">
-                                {{ $serie->title }}
-                            </h3>
-                            
-                            @if($serie->description)
-                                <p class="text-primary-600 text-sm mb-4 line-clamp-2">
-                                    {{ Str::limit($serie->description, 120) }}
-                                </p>
-                            @endif
-                            
-                            <div class="space-y-2 mb-4">
-                                <div class="flex items-center text-sm text-primary-600">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                    <span class="font-medium">{{ $serie->launch_date->format('d/m/Y') }}</span>
-                                </div>
-                                <div class="flex items-center text-sm text-primary-600">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                    </svg>
-                                    <span class="font-medium">{{ $serie->seasons->count() }} temporada{{ $serie->seasons->count() != 1 ? 's' : '' }}</span>
-                                </div>
-                            </div>
-                            
-                            <a href="{{ route('series.show', $serie->id) }}" class="btn-secondary w-full text-center">
-                                👁️ Ver Detalhes
-                            </a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <!-- Empty State -->
-            <div class="text-center py-16">
-                <div class="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center">
-                    <svg class="w-16 h-16 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-bold text-primary-800 mb-4">Nenhuma série cadastrada</h3>
-                <p class="text-primary-600 mb-8 text-lg">Comece adicionando sua primeira série à coleção!</p>
-                <button id="openCreateSeriesModal" class="btn">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    ✨ Adicionar Primeira Série
-                </button>
-            </div>
-        @endif
     </div>
 </div>
 @endsection

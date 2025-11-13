@@ -11,6 +11,21 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+// Rotas para embed solutions
+Route::prefix('api/embed')->group(function () {
+    Route::post('/proxy', [\App\Http\Controllers\EmbedController::class, 'proxy'])->name('embed.proxy');
+    Route::post('/metadata', [\App\Http\Controllers\EmbedController::class, 'fetchMetadata'])->name('embed.metadata');
+    Route::post('/validate', [\App\Http\Controllers\EmbedController::class, 'validateUrl'])->name('embed.validate');
+});
+
+// Rotas para links salvos
+Route::prefix('api/saved-links')->group(function () {
+    Route::get('/', [\App\Http\Controllers\SavedLinkController::class, 'index'])->name('saved-links.index');
+    Route::post('/', [\App\Http\Controllers\SavedLinkController::class, 'store'])->name('saved-links.store');
+    Route::get('/{id}', [\App\Http\Controllers\SavedLinkController::class, 'show'])->name('saved-links.show');
+    Route::delete('/{id}', [\App\Http\Controllers\SavedLinkController::class, 'destroy'])->name('saved-links.destroy');
+});
+
 Route::prefix('/series')->name('series.')->group(function () {
     Route::get('/', [SeriesController::class, 'index'])->name('index');
     Route::get('/criar', [SeriesController::class, 'create'])->name('create');

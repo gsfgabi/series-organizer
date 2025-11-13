@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use Illuminate\Http\Request;
 use App\Models\Series;
+use Illuminate\Support\Facades\Storage;
 
 class SeriesController extends Controller
 {
@@ -37,14 +38,13 @@ class SeriesController extends Controller
         ]);
 
         $filename = null; // Inicializa a variável filename
+        $extension = null;
 
         if ($request->hasFile('image')) { // Verifica se a imagem foi enviada
             $requestFile = $request->file('image');
             $extension = $requestFile->extension();
             $filename = time() . '.' . $extension;
-            $storagePath = storage_path('app/public/series');
-            File::makeDirectory($storagePath, 0777, true, true);
-            $requestFile->move($storagePath, $filename);
+            $path = $requestFile->storeAs('series', $filename, 'public');
         }
 
         $series = Series::create([
@@ -92,9 +92,7 @@ class SeriesController extends Controller
             $requestFile = $request->file('image');
             $extension = $requestFile->extension();
             $filename = time() . '.' . $extension;
-            $storagePath = storage_path('app/public/series');
-            File::makeDirectory($storagePath, 0777, true, true);
-            $requestFile->move($storagePath, $filename);
+            $path = $requestFile->storeAs('series', $filename, 'public');
 
             // Atualiza ou cria o arquivo
             if ($series->image_id) {

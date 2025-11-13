@@ -10,7 +10,7 @@
     }
     
     body {
-        background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 50%, #e9d5ff 100%);
+        background: linear-gradient(135deg, #fef9e7 0%, #fef3c7 30%, #fde68a 70%, #fcd34d 100%);
         min-height: 100vh;
     }
 }
@@ -104,7 +104,7 @@
     
     .season-card-hover:hover {
         transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
+        box-shadow: 0 25px 50px -12px rgba(217, 119, 6, 0.25);
     }
     
     /* Progress bar animada */
@@ -188,3 +188,21 @@ footer {
     color: #ffffff;
     font-size: 14px;
 }
+
+/* Bloqueia botões de abrir em nova aba dentro de iframes */
+iframe {
+    pointer-events: auto;
+}
+
+/* Esconde elementos que podem abrir em nova aba (se detectáveis via CSS) */
+iframe[src*="google"] ~ *,
+.iframe-container iframe ~ * {
+    /* Previne interação com elementos externos ao iframe */
+}
+
+/* Garante que iframes não permitam navegação externa */
+iframe[sandbox] {
+    /* Sandbox já restringe navegação */
+    isolation: isolate;
+}
+
